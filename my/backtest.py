@@ -2,6 +2,9 @@
 
 """
 TODO:
+- 220708
+리밸런싱 주기 좀 더 다양하게
+
 - 220703
 모듈로 변형 -> 노트북에서 활용
 
@@ -23,18 +26,18 @@ def main():
 usage: %prog [options]
 '''
     parser = OptionParser(usage=usage)
-    parser.add_option('--start',
-                      dest='start',
-                      default='',
-                      help='YYYY/MM (시작월1일)')
-    parser.add_option('--end',
-                      dest='end',
-                      default='',
-                      help='YYYY/MM (종료월말일)')
+    # parser.add_option('--start',
+    #                   dest='start',
+    #                   default='',
+    #                   help='YYYY/MM(/DD) (시작일(1일,미명시))')
+    # parser.add_option('--end',
+    #                   dest='end',
+    #                   default='',
+    #                   help='YYYY/MM(/DD) (종료일(말일,미명시))')
     parser.add_option('--period',
                       dest='period',
                       default='',
-                      help='YYYY/MM~YYYY/MM (시작월1일~종료월말일)')
+                      help='YYYY/MM(/DD)~YYYY/MM(/DD) (시작일(첫영업일,미명시)~종료일(마지막영업일,미명시))')
     parser.add_option('--initial_money',
                       dest='initial_money',
                       default='',
@@ -43,10 +46,10 @@ usage: %prog [options]
                       dest='strategy',
                       default='0',
                       help='1:저평가,2:소형주+저평가,3:NCAV,4:F-Score (/*| 구분자로 조합*/)')
-    parser.add_option('--duration',
-                      dest='duration',
-                      default='H',
-                      help='H:활로윈(default),/*Y:매년,M:매월*/,[1-12]:지정한개월수마다 (0: 리밸런싱 안함)')
+    parser.add_option('--rebalance',
+                      dest='rebalance',
+                      default='',
+                      help='0 or blank:리밸런싱 안함(default),H:활로윈,/*Y:매년,M:매월*/,[1-12]y|m|w|d:지정한기간마다')
     parser.add_option('--number',
                       dest='number',
                       default='20',
@@ -59,16 +62,58 @@ usage: %prog [options]
 
     import datetime
 
+    LAST_DAY_OF_MONTH = [31,28,31,30,31,30,31,31,30,31,30,31]
+
     split = options.period.split('~')
     start_year = int(split[0].split('/')[0])
     start_month = int(split[0].split('/')[1])
+    if len(split[0].split('/')) > 2:
+        start_day = int(split[0].split('/')[2])
+    else:
+        start_day = 1
     end_year = int(split[1].split('/')[0])
     end_month = int(split[1].split('/')[1])
+    if len(split[1].split('/')) > 2:
+        end_day = int(split[1].split('/')[2])
+    else:
+        end_day = LAST_DAY_OF_MONTH[end_month-1]
 
-    duration = int(options.duration)
+    from enum import Enum
+
+    class RebalanceType(Enum):
+        PERIODIC = 1
+        FIXED = 2
+        NONE = 3
+
+    class PeriodicType(Enum):
+        YEARLY = 1
+        MONTHLY = 2
+        WEEKLY = 3
+        DAILY = 4
+
+    import re
+
+    rebalanceType = RebalanceType.PERIODIC
+    periodicType = PeriodicType.MONTHLY
+
+    pattern = re.compile("([0-9]+)(y|m|w|d)")
+    matched = pattern.match(options.rebalance)
+    if matched:
+        map = {
+            'y': PeriodicType.YEARLY,
+            'm': PeriodicType.MONTHLY,
+            'w': PeriodicType.WEEKLY,
+            'd': PeriodicType.DAILY,
+        }
+        periodicType = map[matched.group(2)]
+        duration = int(matched.group(1))
+    else:
+        # Not implemented yet
+        pass
 
     y = start_year
     m = start_month
+    # d = start_day
 
     import os
     import pandas as pd
@@ -198,8 +243,7 @@ usage: %prog [options]
 
         # Backtest
         start_date = '{:d}-{:02d}-01'.format(y, m)
-        last_day_of_month = [31,28,31,30,31,30,31,31,30,31,30,31]
-        end_d = last_day_of_month[m-1]
+        end_d = LAST_DAY_OF_MONTH[m-1]
         end_date = '{:d}-{:02d}-{:02d}'.format(end_y, end_m, end_d)
         price = marcap_data(start_date, end_date)
 
