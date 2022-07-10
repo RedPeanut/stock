@@ -60,35 +60,12 @@ usage: %prog [options]
     import datetime
 
     split = options.period.split('~')
-    # start = split[0] + '/01'
-    # start_date = datetime.datetime.strptime(start, '%Y/%m/%d')
-    #
-    # #end_date = datetime.datetime.strptime(end, '%Y/%m/%d') + datetime.timedelta(months=+1) + datetime.timedelta(days=-1)
-    # end = split[1] + '/01'
-    # y = int(split[1].split('/')[0])
-    # m = int(split[1].split('/')[1])
-    # if m == 12:
-    #     y += 1
-    #     m = 1
-    # else:
-    #     m += 1
-    # end_date = datetime.datetime(y, m, 1) + datetime.timedelta(days=-1)
-
     start_year = int(split[0].split('/')[0])
     start_month = int(split[0].split('/')[1])
     end_year = int(split[1].split('/')[0])
     end_month = int(split[1].split('/')[1])
 
-    # diff_year = end_year - start_year
-    # diff_month = end_month - start_month + 1
-    # if diff_month < 0:
-    #     diff_year -= 1
-    #     diff_month += 12
-    #
-    # diff_months = diff_year * 12 + diff_month
-
     duration = int(options.duration)
-    #diff_months / duration
 
     y = start_year
     m = start_month
