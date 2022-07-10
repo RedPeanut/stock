@@ -6,7 +6,7 @@ TODO:
 리밸런싱 주기 좀 더 다양하게
 
 - 220703
-모듈로 변형 -> 노트북에서 활용
+모듈로 변형 -> 노트북에서 활용 -> 비교
 
 - 220702
 모멘텀, 추세추종
@@ -17,7 +17,18 @@ TODO:
 """
 
 
-def main():
+def backtest(args=None):
+
+    from enum import Enum
+
+    class Mode(Enum):
+        COMMAND_LINE = 1
+        MODULE = 2
+
+    if args is None:
+        mode = Mode.COMMAND_LINE
+    else:
+        mode = Mode.MODULE
 
     from optparse import OptionParser
 
@@ -26,6 +37,7 @@ def main():
 usage: %prog [options]
 '''
     parser = OptionParser(usage=usage)
+
     # parser.add_option('--start',
     #                   dest='start',
     #                   default='',
@@ -58,7 +70,8 @@ usage: %prog [options]
                       dest='fee',
                       default='0.015',
                       help='수수료(%)')
-    (options, args) = parser.parse_args()
+
+    (options, args) = parser.parse_args(args)
 
     import datetime
 
@@ -77,8 +90,6 @@ usage: %prog [options]
         end_day = int(split[1].split('/')[2])
     else:
         end_day = LAST_DAY_OF_MONTH[end_month-1]
-
-    from enum import Enum
 
     class RebalanceType(Enum):
         PERIODIC = 1
@@ -331,28 +342,34 @@ usage: %prog [options]
     total['max'] = max_list
     total['MDD'] = mdd_list
 
-    # Plot
-    import matplotlib.pyplot as plt
+    print('MDD = ' + str(total['MDD'][:].min()))
 
-    plt.rcParams['font.family'] = 'AppleGothic'
-    plt.rcParams['axes.unicode_minus'] = False
-    #plt.rcParams['figure.figsize'] = (14,4)
-    plt.rcParams['axes.grid'] = True
+    if mode == Mode.MODULE:
+        return total
+    else:
+        # Plot
+        import matplotlib.pyplot as plt
 
-    plt.figure(figsize=(10, 6))
-    #plt.subplot(nrows,ncols,index)
-    #fig, axes = plt.subplots(3, 1, constrained_layout=True)
-    plt.subplot(211)
-    total['총변화율'].plot(title='총변화율')
-    plt.subplot(313)
-    total['MDD'].plot(title='MDD')
+        plt.rcParams['font.family'] = 'AppleGothic'
+        plt.rcParams['axes.unicode_minus'] = False
+        #plt.rcParams['figure.figsize'] = (14,4)
+        plt.rcParams['axes.grid'] = True
 
-    # plt.subplots_adjust(hspace=3)
-    plt.show()
+        plt.figure(figsize=(10, 6))
+        #plt.subplot(nrows,ncols,index)
+        #fig, axes = plt.subplots(3, 1, constrained_layout=True)
+        plt.subplot(211)
+        total['총변화율'].plot(title='총변화율')
+        plt.subplot(313)
+        total['MDD'].plot(title='MDD')
 
-    #print('for break...')
+        # plt.subplots_adjust(hspace=3)
+        plt.show()
+
+        #print('for break...')
+
     pass
 
 
 if __name__ == '__main__':
-    main()
+    backtest()

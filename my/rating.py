@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-def main():
+def rating(args=None):
 
     from optparse import OptionParser
 
@@ -12,7 +12,7 @@ def main():
                       dest='name',
                       default='',
                       help='파일명: YY_NQ_년월일_시분초.xlsx')
-    (options, args) = parser.parse_args()
+    (options, args) = parser.parse_args(args)
 
     import os
     import pandas as pd
@@ -88,4 +88,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    rating()

@@ -171,7 +171,7 @@ def make_dataframe(title, url, encparam, code, name, options, ACC_NMs):
     return result
 
 
-def main():
+def crawling(args=None):
 
     import os
 
@@ -201,7 +201,7 @@ usage: %prog [options]
                       dest='base',
                       default='',
                       help='기준일: (default)=오늘, target=조회분기')
-    (options, args) = parser.parse_args()
+    (options, args) = parser.parse_args(args)
 
     merged = None
     total = None
@@ -389,4 +389,4 @@ usage: %prog [options]
     pass
 
 if __name__ == '__main__':
-    main()
+    crawling()
