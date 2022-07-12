@@ -142,7 +142,7 @@ usage: %prog [options]
     backtest = None
     total = None
 
-    while m <= end_month and y <= end_year:
+    while y < end_year or (y == end_year and m <= end_month):
 
         # Rebalance
 
@@ -254,7 +254,7 @@ usage: %prog [options]
 
         # Backtest
         start_date = '{:d}-{:02d}-01'.format(y, m)
-        end_d = LAST_DAY_OF_MONTH[m-1]
+        end_d = LAST_DAY_OF_MONTH[end_m-1]
         end_date = '{:d}-{:02d}-{:02d}'.format(end_y, end_m, end_d)
         price = marcap_data(start_date, end_date)
 
