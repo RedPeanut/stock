@@ -24,5 +24,7 @@ venv/
 old/
 marcap/
 FinanceDataReader/
+dart-fss/
+fsdata/
 download/
 logs/
