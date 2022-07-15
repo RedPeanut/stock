@@ -388,5 +388,6 @@ usage: %prog [options]
     print('total elapsed time = ' + format_time_from_seconds(time.time() - start))
     pass
 
+
 if __name__ == '__main__':
     crawling()
