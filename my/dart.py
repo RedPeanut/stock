@@ -10,7 +10,7 @@ def dart(args=None):
     import dart_fss
     
     # Open DART API KEY 설정
-    api_key='98fc399b120769da91658e4b2ef55c4e25f3e303'
+    api_key = '98fc399b120769da91658e4b2ef55c4e25f3e303'
     dart_fss.set_api_key(api_key=api_key)
     
     # DART 에 공시된 회사 리스트 불러오기

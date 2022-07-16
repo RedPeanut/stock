@@ -45,6 +45,13 @@ def rating(args=None):
     # 중국기업 필터링
     merged = merged.loc[~merged['종목코드'].str.startswith('9')]
 
+    '''
+    저PER, 저PBR 전략을 사용할 때는 PER 이 1 이하, PBR 이 0.3 이하와 같이 과도하게 PER 과 PBR 이 낮은 종목들은 필터링을 하는 경우가 많습니다.
+    출처: https://pinotlab.tistory.com/20
+    '''
+    merged = merged.loc[merged['PER'] > 1]
+    merged = merged.loc[merged['PBR'] > 0.3]
+
     # 종합순위(1/PER+1/PBR+1/PCR+1/PSR)
     merged['GP/A'] = merged['매출총이익']/merged['자산총계']
     merged['1/PER'] = 1/merged['PER']
