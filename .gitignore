@@ -24,7 +24,11 @@ venv/
 old/
 marcap/
 FinanceDataReader/
-dart-fss/
+dart_fss/
+dart_fss_classifier/
 fsdata/
+OpenDartReader/
+docs_cache/
 download/
+v2/
 logs/
