@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 
-
 def format_time_from_seconds(time):
     
     if time < 0:
