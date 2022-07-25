@@ -8,16 +8,10 @@ def main():
 
     api_key='98fc399b120769da91658e4b2ef55c4e25f3e303'
     
-    # import OpenDartReader
-    #
-    # odr = OpenDartReader(api_key)
-    # odr.corp_codes['stock_code'] = odr.corp_codes['stock_code'].apply(lambda x: x.strip())
-    # finstate = dart.finstate('삼성전자', 2012)
-    # finstate_all = dart.finstate_all('005930', 2012) #
-
     import dart_fss as dart
     import dart_fss_classifier
     assert dart_fss_classifier.attached_plugin() == True
+
     import time
     from my.utils import ( format_time_from_seconds )
 
@@ -29,21 +23,45 @@ def main():
     # DART 에 공시된 회사 리스트 불러오기
     corp_list = dart.get_corp_list()
 
-    #print('elapsed time = ' + format_time_from_seconds(time.time() - start_time))
+    print(len(corp_list._stock_market))
 
-    #start_time = time.time()
-    # # 삼성전자 검색
-    # samsung = corp_list.find_by_corp_name('삼성전자', exactly=True)[0]
-    #
-    # # 연간 연결재무제표 불러오기
-    # # 2000 ? 2012 o
-    # fs = samsung.extract_fs(bgn_de='19000101')
-    #
-    # print('2.elapsed time = ' + format_time_from_seconds(time.time() - start_time))
-    # #start = time.time()
-    #
-    # # 재무제표 검색 결과를 엑셀파일로 저장 ( 기본저장위치: 실행폴더/fsdata )
-    # fs.save()
+    from dart_fss.utils import dict_to_html, create_folder
+    from dart_fss.errors.errors import NotFoundConsolidated
+    import traceback
+
+    # 59 [00651901]에어부산 ?
+    # 61 [01325979]세아제강
+
+    try:
+        corp = corp_list.find_by_corp_name('세아제강', exactly=True)[0]
+        #print(idx, corp)
+
+        import os
+
+        path = os.getcwd()
+        path = os.path.join(path, 'fsdata')
+        create_folder(path)
+
+        report_tp = 'annual' if corp.info.get('report_tp') is None else corp.info.get('report_tp')
+        filename = '{}_{}.xlsx'.format(corp.info.get('corp_code'), report_tp)
+
+        if not os.path.exists(path + '/' + filename):
+
+            all_report_tp = ('annual', 'half', 'quarter')
+            all_report_name = ('Annual', 'Semiannual', 'Quarterly')
+            all_pblntf_detail_ty = ('A001', 'A002', 'A003')
+
+            reports = corp.search_filings(bgn_de='19000101', page_count=100, last_reprt_at='Y')
+            length = len(reports)
+
+            #fs = corp.extract_fs(bgn_de='19000101', report_tp=report_tp)
+            #fs.save()
+
+            pass
+    except NotFoundConsolidated:
+        print('연결재무제표 찾을수 없음')
+    except Exception as ex:
+        traceback.print_exc()
 
     pass
 

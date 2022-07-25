@@ -27,6 +27,7 @@ FinanceDataReader/
 dart_fss/
 dart_fss_classifier/
 fsdata/
+xml_cache/
 OpenDartReader/
 docs_cache/
 download/
