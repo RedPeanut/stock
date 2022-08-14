@@ -7,7 +7,7 @@
 """
 
 
-def crawling_v2(args=None):
+def dart_crawling(args=None):
 
     from optparse import OptionParser
 
@@ -46,36 +46,41 @@ def crawling_v2(args=None):
 
     #print(len(corp_list._stock_market))
 
+    from dart_fss.fs import extract
     from dart_fss.utils import dict_to_html, create_folder
     from dart_fss.errors.errors import NotFoundConsolidated
     import traceback
 
     page = int(options.page)
     size = int(options.size)
-    firstIndex = (page-1) * size
+    first_index = (page-1) * size
 
     for idx, (key, value) in enumerate(corp_list._stock_market.items()):
 
-        if firstIndex <= idx and idx < firstIndex + size:
+        if first_index <= idx < first_index + size:
 
             try:
                 corp = corp_list.find_by_stock_code(key)
                 print(idx, corp)
 
+                if corp is None:
+                    continue
+
                 import os
 
-                path = os.getcwd()
-                path = os.path.join(path, 'fsdata')
+                separate = False
+                path = os.path.join(os.getcwd(), 'fsdata' + ('_개별' if separate is True else '_연결'))
                 create_folder(path)
 
                 report_tp = 'annual' if corp.info.get('report_tp') is None else corp.info.get('report_tp')
                 filename = '{}_{}.xlsx'.format(corp.info.get('corp_code'), report_tp)
 
                 if not os.path.exists(path + '/' + filename):
-                    fs = corp.extract_fs(bgn_de='19000101', report_tp=report_tp)
-                    fs.save()
+                    fs = extract(corp.corp_code, bgn_de='19000101', report_tp=report_tp, separate=separate)
+                    fs.save(separate=separate)
 
             except NotFoundConsolidated:
+                # traceback.print_exc()
                 print('연결재무제표 찾을수 없음')
                 continue
             except Exception as e:
@@ -83,9 +88,9 @@ def crawling_v2(args=None):
                 continue
         pass
 
-    print('total elapsed time = ' + format_time_from_seconds(time.time() - start))
+    print('total elapsed time = ' + format_time_from_seconds(time.time() - start_time))
     pass
 
 
 if __name__ == '__main__':
-    crawling_v2()
+    dart_crawling()
