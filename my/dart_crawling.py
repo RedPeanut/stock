@@ -25,9 +25,20 @@ def dart_crawling(args=None):
                       dest='size',
                       default='50',
                       help='')
+    parser.add_option('--report_tp',
+                      dest='report_tp',
+                      default='quarter',
+                      help='annual:연간,half:연간+반기,quarter:연간+반기+분기')
+    parser.add_option('--separate',
+                      dest='separate',
+                      default='F',
+                      help='T:연결,F:별도')
     (options, args) = parser.parse_args(args)
 
-    api_key='98fc399b120769da91658e4b2ef55c4e25f3e303'
+    separate = True if options.separate == 'T' else False
+    report_tp = options.report_tp
+
+    api_key = '98fc399b120769da91658e4b2ef55c4e25f3e303'
 
     import dart_fss as dart
     import dart_fss_classifier
@@ -50,6 +61,7 @@ def dart_crawling(args=None):
     from dart_fss.utils import dict_to_html, create_folder
     from dart_fss.errors.errors import NotFoundConsolidated
     import traceback
+    import os
 
     page = int(options.page)
     size = int(options.size)
@@ -66,13 +78,11 @@ def dart_crawling(args=None):
                 if corp is None:
                     continue
 
-                import os
-
-                separate = False
+                # separate = False
                 path = os.path.join(os.getcwd(), 'fsdata' + ('_개별' if separate is True else '_연결'))
                 create_folder(path)
 
-                report_tp = 'annual' if corp.info.get('report_tp') is None else corp.info.get('report_tp')
+                # report_tp = 'annual' if corp.info.get('report_tp') is None else corp.info.get('report_tp')
                 filename = '{}_{}.xlsx'.format(corp.info.get('corp_code'), report_tp)
 
                 if not os.path.exists(path + '/' + filename):

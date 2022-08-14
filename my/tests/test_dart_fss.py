@@ -19,6 +19,9 @@ class MyTests(unittest.TestCase):
 
     def test_page_1(self):
 
+        separate = False
+        report_tp = 'quarter'
+
         from dart_fss.fs import extract
         from dart_fss.utils import create_folder
         from dart_fss.errors.errors import NotFoundConsolidated
@@ -44,11 +47,11 @@ class MyTests(unittest.TestCase):
             corp = self.corp_list.find_by_corp_name('카카오페이', exactly=True)[0]
             #print(idx, corp)
 
-            separate = False
+            # separate = False
             path = os.path.join(os.getcwd(), 'fsdata' + ('_개별' if separate is True else '_연결'))
             create_folder(path)
 
-            report_tp = 'annual' if corp.info.get('report_tp') is None else corp.info.get('report_tp')
+            # report_tp = 'annual' if corp.info.get('report_tp') is None else corp.info.get('report_tp')
             filename = '{}_{}.xlsx'.format(corp.info.get('corp_code'), report_tp)
 
             if not os.path.exists(path + '/' + filename):
