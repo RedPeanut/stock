@@ -41,8 +41,8 @@ def dart_crawling(args=None):
     api_key = '98fc399b120769da91658e4b2ef55c4e25f3e303'
 
     import dart_fss as dart
-    import dart_fss_classifier
-    assert dart_fss_classifier.attached_plugin() == True
+    # import dart_fss_classifier
+    # assert dart_fss_classifier.attached_plugin() == True
 
     import time
     from my.utils import ( format_time_from_seconds )
@@ -57,7 +57,7 @@ def dart_crawling(args=None):
 
     #print(len(corp_list._stock_market))
 
-    from dart_fss.fs import extract
+    from dart_fss.fs import extract_v2
     from dart_fss.utils import dict_to_html, create_folder
     from dart_fss.errors.errors import NotFoundConsolidated
     import traceback
@@ -86,7 +86,7 @@ def dart_crawling(args=None):
                 filename = '{}_{}.xlsx'.format(corp.info.get('corp_code'), report_tp)
 
                 if not os.path.exists(path + '/' + filename):
-                    fs = extract(corp.corp_code, bgn_de='19000101', report_tp=report_tp, separate=separate)
+                    fs = extract_v2(corp, bgn_de='19000101', report_tp=report_tp, separate=separate)
                     fs.save(separate=separate)
 
             except NotFoundConsolidated:
