@@ -1,5 +1,22 @@
 # -*- coding: utf-8 -*-
 
+# Jupyter Notebook Checker
+def is_notebook():
+    """ Jupyter Notebook을 사용하는지 확인하는 함수
+
+    Returns
+    -------
+    bool
+        Jupyter Notebook 사용시 True
+    """
+    try:
+        from IPython import get_ipython
+        if 'IPKernelApp' not in get_ipython().config:
+            return False
+    except Exception:
+        return False
+    return True
+
 
 def format_time_from_seconds(time):
     

@@ -10,6 +10,7 @@
 def dart_crawling(args=None):
 
     from optparse import OptionParser
+    import datetime
 
     usage = \
         '''
@@ -31,12 +32,22 @@ def dart_crawling(args=None):
                       help='annual:연간,half:연간+반기,quarter:연간+반기+분기')
     parser.add_option('--separate',
                       dest='separate',
-                      default='F',
+                      default='T',
                       help='T:연결,F:별도')
+    parser.add_option('--bgn_de',
+                      dest='bgn_de',
+                      default='19000101',
+                      help='검색시작일자(YYYYMMDD), 기본값:19000101')
+    parser.add_option('--end_de',
+                      dest='end_de',
+                      default='',
+                      help='검색종료일자(YYYYMMDD), 기본값:당일')
     (options, args) = parser.parse_args(args)
 
     separate = True if options.separate == 'T' else False
     report_tp = options.report_tp
+    end_de = datetime.datetime.now().strftime('%y%m%d') if options.end_de == '' else options.end_de
+    bgn_de = options.bgn_de
 
     api_key = '98fc399b120769da91658e4b2ef55c4e25f3e303'
 
@@ -86,7 +97,7 @@ def dart_crawling(args=None):
                 filename = '{}_{}.xlsx'.format(corp.info.get('corp_code'), report_tp)
 
                 if not os.path.exists(path + '/' + filename):
-                    fs = extract_v2(corp, bgn_de='19000101', report_tp=report_tp, separate=separate)
+                    fs = extract_v2(corp, bgn_de=bgn_de, end_de=end_de, report_tp=report_tp, separate=separate)
                     fs.save(separate=separate)
 
             except NotFoundConsolidated:
