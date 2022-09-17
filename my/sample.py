@@ -4,7 +4,7 @@
 """
 
 
-def main():
+def main(args=None):
     pass
 
 
