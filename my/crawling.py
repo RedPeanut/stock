@@ -21,11 +21,11 @@ v GP/A=매출총이익/총자산=(총매출-원가)/총자산
 
 """
 
-""" 회사정보 가져오기:
-(기본): 오늘포함 최근 영업일 
-base=target일 경우: 익월 첫날부터 역으로
-"""
 def get_firm_data_v3(options):
+    """ 회사정보 가져오기:
+    (기본): 오늘포함 최근 영업일
+    base=target일 경우: 익월 첫날부터 역으로
+    """
 
     import pandas as pd
     from marcap import marcap_data
