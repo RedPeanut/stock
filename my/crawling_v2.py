@@ -131,10 +131,10 @@ if __name__ == '__main__':
     parser.add_option('--base',
                       dest='base',
                       default='',
-                      help='기준일-(default:오늘),target:조회분기')
+                      help='기준일-빈값(default:오늘),target:조회분기')
     parser.add_option('--workers',
                       dest='workers',
-                      default='4',
-                      help='워커갯수-(default:4)')
+                      default='8',
+                      help='워커갯수-(default:8)')
     (options, args) = parser.parse_args()
     Crawling(options)
