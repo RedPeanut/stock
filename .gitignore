@@ -26,6 +26,7 @@ marcap/
 FinanceDataReader/
 dart_fss/
 dart_fss_classifier/
+pykrx/
 fsdata*/
 .cache/
 OpenDartReader/

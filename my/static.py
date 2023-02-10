@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
 
+def get_firm_data_v4(options):
+    from pykrx import stock
+    return stock.get_market_cap()
+
+
 def get_firm_data_v3(options):
     """ 회사정보 가져오기:
     (기본): 오늘포함 최근 영업일
