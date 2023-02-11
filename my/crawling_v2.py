@@ -28,8 +28,8 @@ class Crawling:
         self._total = None
         self._firm_data = my.static.get_firm_data_v3(options)
 
-        log_lock = threading.Lock()
-        params = (log_lock, options, self.callback)
+        lock = threading.Lock()
+        params = (lock, options, self.callback)
         self._workers = [my.worker.Worker(*params) for _ in range(int(options.workers))]
         self.run()
 

@@ -16,9 +16,9 @@ class Worker(threading.Thread):
 
     WAIT_TIME = 0.1
 
-    def __init__(self, log_lock, options, callback):
+    def __init__(self, lock, options, callback):
         super(Worker, self).__init__()
-        self.log_lock = log_lock
+        self.lock = lock
         self.options = options
         self.callback = callback
 
@@ -52,7 +52,8 @@ class Worker(threading.Thread):
                         '종목명': row['Name'],
                         '기준일': row['Date'].strftime('%Y-%m-%d'),
                         '시가총액': row['Marcap'],
-                        '상장주식수': row['Stocks']
+                        '상장주식수': row['Stocks'],
+                        '소속부': row['Dept'],
                     }, [code])
                     init_df.index.name = '종목코드'
 
@@ -131,7 +132,9 @@ class Worker(threading.Thread):
                     merged = pd.merge(merged, activity_df, how='outer', left_index=True, right_index=True)
 
                     self._successful += 1
+                    self.lock.acquire()
                     self.callback(merged)
+                    self.lock.release()
                     self._reset()
 
                 except OSError:
@@ -155,9 +158,9 @@ class Worker(threading.Thread):
 
     def _log(self, msg):
         """ This method is used to write the given data in a synchronized way """
-        self.log_lock.acquire()
+        self.lock.acquire()
         print(msg)
-        self.log_lock.release()
+        self.lock.release()
 
     def _reset(self):
         """Reset self._data back to the original state. """
