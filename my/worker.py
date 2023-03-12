@@ -51,9 +51,9 @@ class Worker(threading.Thread):
                     init_df = pd.DataFrame({
                         '종목명': row['Name'],
                         '기준일': row['Date'].strftime('%Y-%m-%d'),
+                        '소속부': row['Dept'],
                         '시가총액': row['Marcap'],
                         '상장주식수': row['Stocks'],
-                        '소속부': row['Dept'],
                     }, [code])
                     init_df.index.name = '종목코드'
 

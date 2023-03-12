@@ -26,21 +26,26 @@ def rating(args=None):
 
     # 전처리
     data['종목코드'] = data['종목코드'].apply(lambda x: '{:06d}'.format(x))
+    data['소속부'] = data['소속부'].apply(lambda x: x if x not in (None, '', np.NAN) else ' ')
 
     # 섹터,산업,대표,홈페이지 컬럼 추가
     import FinanceDataReader as fdr
     krx = fdr.StockListing('KRX')
-    krx = krx[['Symbol','Sector','Industry','Representative','HomePage']]
+    # krx = krx[['Symbol','Sector','Industry' ''', 'Representative','HomePage' ''']]
+    krx = krx[['Symbol', 'Sector', 'Industry']]
     merged = pd.merge(data, krx, how='left', left_on='종목코드', right_on='Symbol')
     merged.insert(merged.columns.get_loc('종목명')+1, '섹터', merged['Sector'], allow_duplicates=False)
     merged.insert(merged.columns.get_loc('섹터')+1, '산업', merged['Industry'], allow_duplicates=False)
-    merged.insert(merged.columns.get_loc('산업')+1, '대표', merged['Representative'], allow_duplicates=False)
-    merged.insert(merged.columns.get_loc('대표')+1, '홈페이지', merged['HomePage'], allow_duplicates=False)
+    # merged.insert(merged.columns.get_loc('산업')+1, '대표', merged['Representative'], allow_duplicates=False)
+    # merged.insert(merged.columns.get_loc('대표')+1, '홈페이지', merged['HomePage'], allow_duplicates=False)
     merged = merged.drop(['Symbol'], axis=1)
     merged = merged.drop(['Sector'], axis=1)
     merged = merged.drop(['Industry'], axis=1)
-    merged = merged.drop(['Representative'], axis=1)
-    merged = merged.drop(['HomePage'], axis=1)
+    # merged = merged.drop(['Representative'], axis=1)
+    # merged = merged.drop(['HomePage'], axis=1)
+
+    merged.index.name = merged['기준일'][0]
+    merged = merged.drop(['기준일'], axis=1)
 
     # 중국기업 필터링
     merged = merged.loc[~merged['종목코드'].str.startswith('9')]
