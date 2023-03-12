@@ -13,8 +13,8 @@ class Crawling:
 
     """
     """
-
-    WAIT_TIME = 0.1
+    # ENABLE_DEBUG = True
+    WAIT_TIME = 0.001
 
     def __init__(self, options):
 
