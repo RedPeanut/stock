@@ -111,8 +111,12 @@ class Crawling:
 if __name__ == '__main__':
 
     import os
+    import platform
 
-    os.system('sh marcap.sh')
+    if platform.system() == 'Windows':
+        os.system('marcap.bat')
+    else:  # Linux, Mac
+        os.system('sh marcap.sh')
 
     from optparse import OptionParser
 
