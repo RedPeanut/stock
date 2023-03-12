@@ -30,14 +30,19 @@ def get_firm_data_v3(options):
         next = datetime.datetime.now()
 
     yyyymmdd = next.strftime('%Y-%m-%d')
-    result = marcap_data(yyyymmdd)
-    while len(result) <= 0:
+    resultList = marcap_data(yyyymmdd)
+    while len(resultList) <= 0:
         next = next + datetime.timedelta(days=-1)
         yyyymmdd = next.strftime('%Y-%m-%d')
-        result = marcap_data(yyyymmdd)
+        resultList = marcap_data(yyyymmdd)
 
-    result = result.sort_values(by='Name', ascending=True)
-    result = result.reset_index(drop=False)
+    resultList = resultList.sort_values(by='Name', ascending=True)
+    resultList = resultList.reset_index(drop=False)
+
+    result = {'resultCode': 0, 'resultMsg': '', 'resultData': None}
+    result['resultCode'] = 0
+    result['resultMsg'] = ''
+    result['resultData'] = {'resultList': resultList, 'yyyymmdd': yyyymmdd}
     return result
 
 

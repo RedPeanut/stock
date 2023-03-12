@@ -26,7 +26,8 @@ class Crawling:
 
         # self._merged = None
         self._total = None
-        self._firm_data = my.static.get_firm_data_v3(options)
+        self._firm_data = my.static.get_firm_data_v3(options)['resultData']['resultList']
+        # self._firm_data = self._firm_data.iloc[0:10]
 
         lock = threading.Lock()
         params = (lock, options, self.callback)
