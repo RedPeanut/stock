@@ -47,8 +47,9 @@ def rating(args=None):
     merged.index.name = merged['기준일'][0]
     merged = merged.drop(['기준일'], axis=1)
 
-    # 중국기업 필터링
+    # 중국,스펙기업 필터링
     merged = merged.loc[~merged['종목코드'].str.startswith('9')]
+    merged = merged.loc[~merged['소속부'].str.contains('SPAC')]
 
     '''
     저PER, 저PBR 전략을 사용할 때는 PER 이 1 이하, PBR 이 0.3 이하와 같이 과도하게 PER 과 PBR 이 낮은 종목들은 필터링을 하는 경우가 많습니다.
