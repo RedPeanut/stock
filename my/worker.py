@@ -14,7 +14,7 @@ class Worker(threading.Thread):
     """
     """
 
-    WAIT_TIME = 0.1
+    WAIT_TIME = 0.01
 
     def __init__(self, lock, options, callback):
         super(Worker, self).__init__()

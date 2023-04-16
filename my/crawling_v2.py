@@ -14,7 +14,7 @@ class Crawling:
     """
     """
     # ENABLE_DEBUG = True
-    WAIT_TIME = 0.001
+    WAIT_TIME = 0.01
 
     def __init__(self, options):
 
@@ -57,6 +57,7 @@ class Crawling:
                     time.sleep(self.WAIT_TIME)
                     continue
 
+            # 더이상 처리할 데이터가 없고 워커들이 일을 모두 끝냈으면
             if row is None and self._jobs_done():
                 break
 
