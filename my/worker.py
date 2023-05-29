@@ -58,7 +58,6 @@ class Worker(threading.Thread):
                     init_df.index.name = '종목코드'
 
                     # 재무분석
-
                     result = my.static.make_dataframe(
                         '포괄손익계산서',
                         'https://navercomp.wisereport.co.kr/v2/company/cF3002.aspx?rpt=0&finGubun=MAIN&cn=',
@@ -90,7 +89,6 @@ class Worker(threading.Thread):
                     # cash_state_df = result['resultData']
 
                     # 투자지표
-
                     result = my.static.make_dataframe(
                         '수익성',
                         'https://navercomp.wisereport.co.kr/v2/company/cF4002.aspx?rpt=1&finGubun=MAIN&cn=',

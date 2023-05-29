@@ -108,8 +108,8 @@ def make_dataframe(title, url, encparam, code, name, options, ACC_NMs):
         for j in range(0, len(ACC_NMs)):
             if \
                     (ACC_NMs[j].startswith('!') == False and replaced == ACC_NMs[j]) \
-                            or (ACC_NMs[j].startswith('!') == True and original == ACC_NMs[j].replace('!', '')) \
-                    :
+                    or (ACC_NMs[j].startswith('!') == True and original == ACC_NMs[j].replace('!', '')) \
+            :
                 dict[replaced] = DATA[i].get('DATA' + str(n))
                 break
         pass
