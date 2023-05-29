@@ -2,12 +2,15 @@
 """
 """
 
+import datetime
+import os
+import platform
 import time
 import threading
 import pandas as pd
 import my.static
 import my.worker
-
+import my.utils
 
 class Crawling:
 
@@ -27,7 +30,7 @@ class Crawling:
         # self._merged = None
         self._total = None
         self._firm_data = my.static.get_firm_data_v3(options)['resultData']['resultList']
-        # self._firm_data = self._firm_data.iloc[0:10]
+        # self._firm_data = self._firm_data.iloc[0:30]
 
         lock = threading.Lock()
         params = (lock, options, self.callback)
@@ -74,10 +77,6 @@ class Crawling:
 
         # self._time_it_took = time.time() - self._time_it_took
 
-        import os
-        import datetime
-        import my.utils
-
         curr_dir = os.path.dirname(os.path.abspath(__file__))
         os.makedirs(curr_dir + '/download/', exist_ok=True)
         now = datetime.datetime.now()
@@ -111,9 +110,6 @@ class Crawling:
 
 if __name__ == '__main__':
 
-    import os
-    import platform
-
     if platform.system() == 'Windows':
         os.system('marcap.bat')
     else:  # Linux, Mac
@@ -133,14 +129,27 @@ if __name__ == '__main__':
                       help='0:연간,1(default):분기')
     parser.add_option('--quarter',
                       dest='quarter',
-                      help='YYYY/MM')
+                      default='',
+                      help='조회분기(YYYY/MM): 빈값(default:최근분기)')
     parser.add_option('--base',
                       dest='base',
                       default='',
-                      help='기준일-빈값(default:오늘),target:조회분기')
+                      help='기준일: 빈값(default:오늘),target:조회분기')
     parser.add_option('--workers',
                       dest='workers',
                       default='8',
                       help='워커갯수-(default:8)')
     (options, args) = parser.parse_args()
+
+    if options.quarter is None or options.quarter == '':
+        now = datetime.datetime.now()
+        div = (int)(now.month/3)
+        year = now.year
+        if div == 0:
+            year = now.year - 1
+            nq = 12
+        else:
+            nq = div*3
+        options.quarter = str(year) + '/' + my.utils.two_digits(nq)
+
     Crawling(options)

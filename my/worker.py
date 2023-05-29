@@ -50,6 +50,7 @@ class Worker(threading.Thread):
 
                     init_df = pd.DataFrame({
                         '종목명': row['Name'],
+                        '전분기': '', # insert whether using previous data in here
                         '기준일': row['Date'].strftime('%Y-%m-%d'),
                         '소속부': row['Dept'],
                         '시가총액': row['Marcap'],
@@ -65,10 +66,12 @@ class Worker(threading.Thread):
                         ['매출액(수익)', '매출총이익', '영업이익', '당기순이익']
                     )
 
-                    if result is None or result['resultCode'] != 0:
+                    if result is None or result['resultCode'] == -1:
                         self._log(result['resultMsg'])
                         self._reset()
                         continue
+                    elif result['resultCode'] == 1:
+                        init_df['전분기'] = 'v'
 
                     income_state_df = result['resultData']
 

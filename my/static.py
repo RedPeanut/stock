@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import my.utils
+
 
 def get_firm_data_v4(options):
     from pykrx import stock
@@ -86,14 +88,31 @@ def make_dataframe(title, url, encparam, code, name, options, ACC_NMs):
 
     n = None
     for i in range(0, len(YYMM)):
-        if options.quarter in YYMM[i]:
+        if options.quarter in YYMM[i] and '(E)' not in YYMM[i]:
             n = i + 1
             break
 
     if n is None:
-        result['resultCode'] = -1
-        result['resultMsg'] = '조회분기데이터없음, 건너뛰기!'
-        return result
+        year = int(options.quarter.split('/')[0])
+        month = int(options.quarter.split('/')[1])
+        if month == 3:
+            month = 12
+            year -= 1
+        else:
+            month -= 3
+        quarter = str(year) + '/' + my.utils.two_digits(month)
+
+        for i in range(0, len(YYMM)):
+            if quarter in YYMM[i]:
+                n = i + 1
+                break
+
+        if n is None:
+            result['resultCode'] = -1
+            result['resultMsg'] = '조회분기데이터없음, 건너뛰기!'
+            return result
+        else:
+            result['resultCode'] = 1
 
     DATA = json.get('DATA')
     if DATA is None:
@@ -114,7 +133,7 @@ def make_dataframe(title, url, encparam, code, name, options, ACC_NMs):
                 break
         pass
 
-    result['resultCode'] = 0
+    # result['resultCode'] = 0
     result['resultMsg'] = '정상적으로 조회되었습니다.'
     result['resultData'] = pd.DataFrame(dict, [code])
     # result.index.name = options.quarter
