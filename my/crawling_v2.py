@@ -2,7 +2,7 @@
 """
 """
 
-import datetime
+from datetime import datetime, timedelta
 import os
 import platform
 import time
@@ -79,7 +79,7 @@ class Crawling:
 
         curr_dir = os.path.dirname(os.path.abspath(__file__))
         os.makedirs(curr_dir + '/download/', exist_ok=True)
-        now = datetime.datetime.now()
+        now = datetime.now()
 
         split = self._options.quarter.split('/')
         yy = split[0][2:4]
@@ -142,11 +142,11 @@ if __name__ == '__main__':
     (options, args) = parser.parse_args()
 
     if options.quarter is None or options.quarter == '':
-        now = datetime.datetime.now()
-        div = (int)(now.month/3)
-        year = now.year
+        a_month_ago = datetime.now().replace(day=1) - timedelta(days=1)
+        div = (int)(a_month_ago.month / 3)
+        year = a_month_ago.year
         if div == 0:
-            year = now.year - 1
+            year = a_month_ago.year - 1
             nq = 12
         else:
             nq = div*3
