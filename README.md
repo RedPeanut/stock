@@ -1,4 +1,4 @@
-# stock 
+# stock
 
 # Features
 
