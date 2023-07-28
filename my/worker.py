@@ -66,7 +66,10 @@ class Worker(threading.Thread):
                         ['매출액(수익)', '매출총이익', '영업이익', '당기순이익']
                     )
 
-                    if result is None or result['resultCode'] == -1:
+                    if result is None:
+                        self._reset()
+                        continue
+                    elif result['resultCode'] == -1:
                         self._log(result['resultMsg'])
                         self._reset()
                         continue

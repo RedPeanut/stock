@@ -12,6 +12,7 @@ import my.static
 import my.worker
 import my.utils
 
+
 class Crawling:
 
     """
@@ -130,20 +131,20 @@ if __name__ == '__main__':
     parser.add_option('--quarter',
                       dest='quarter',
                       default='',
-                      help='조회분기(YYYY/MM): 빈값(default:최근분기)')
+                      help='조회분기(YYYY/MM): (default:최근분기)')
     parser.add_option('--base',
                       dest='base',
                       default='',
-                      help='기준일: 빈값(default:오늘),target:조회분기')
+                      help='기준일: (default:오늘),target:조회분기')
     parser.add_option('--workers',
                       dest='workers',
                       default='8',
-                      help='워커갯수-(default:8)')
+                      help='워커갯수: (default:8)')
     (options, args) = parser.parse_args()
 
     if options.quarter is None or options.quarter == '':
         a_month_ago = datetime.now().replace(day=1) - timedelta(days=1)
-        div = (int)(a_month_ago.month / 3)
+        div = int(a_month_ago.month / 3)
         year = a_month_ago.year
         if div == 0:
             year = a_month_ago.year - 1
