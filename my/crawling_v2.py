@@ -153,4 +153,16 @@ if __name__ == '__main__':
             nq = div*3
         options.quarter = str(year) + '/' + my.utils.two_digits(nq)
 
+    options.curr_quarter = options.quarter
+
+    year = int(options.quarter.split('/')[0])
+    month = int(options.quarter.split('/')[1])
+    if month == 3:
+        month = 12
+        year -= 1
+    else:
+        month -= 3
+    last_quarter = str(year) + '/' + my.utils.two_digits(month)
+    options.last_quarter = last_quarter
+
     Crawling(options)

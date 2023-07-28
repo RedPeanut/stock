@@ -93,17 +93,8 @@ def make_dataframe(title, url, encparam, code, name, options, ACC_NMs):
             break
 
     if n is None:
-        year = int(options.quarter.split('/')[0])
-        month = int(options.quarter.split('/')[1])
-        if month == 3:
-            month = 12
-            year -= 1
-        else:
-            month -= 3
-        quarter = str(year) + '/' + my.utils.two_digits(month)
-
         for i in range(0, len(YYMM)):
-            if quarter in YYMM[i]:
+            if options.last_quarter in YYMM[i]:
                 n = i + 1
                 break
 
