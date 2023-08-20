@@ -7,7 +7,7 @@ import time
 import traceback
 import pandas as pd
 import my.static
-
+import my.naver
 
 class Worker(threading.Thread):
 
@@ -42,7 +42,7 @@ class Worker(threading.Thread):
 
                     self._log('{} {} {}'.format(row.name, code, name))
 
-                    encparam = my.static.get_encparam(code)
+                    encparam = my.naver.get_encparam(code)
                     if encparam is None or encparam == '' or encparam is False:
                         self._log('암호키 읽어오기 실패, 건너뛰기!')
                         self._reset()
@@ -59,7 +59,7 @@ class Worker(threading.Thread):
                     init_df.index.name = '종목코드'
 
                     # 재무분석
-                    result = my.static.make_dataframe(
+                    result = my.naver.make_dataframe(
                         '포괄손익계산서',
                         'https://navercomp.wisereport.co.kr/v2/company/cF3002.aspx?rpt=0&finGubun=MAIN&cn=',
                         encparam, code, name, self.options,
@@ -78,7 +78,7 @@ class Worker(threading.Thread):
 
                     income_state_df = result['resultData']
 
-                    result = my.static.make_dataframe(
+                    result = my.naver.make_dataframe(
                         '재무상태표',
                         'https://navercomp.wisereport.co.kr/v2/company/cF3002.aspx?rpt=1&finGubun=MAIN&cn=',
                         encparam, code, name, self.options,
@@ -95,7 +95,7 @@ class Worker(threading.Thread):
                     # cash_state_df = result['resultData']
 
                     # 투자지표
-                    result = my.static.make_dataframe(
+                    result = my.naver.make_dataframe(
                         '수익성',
                         'https://navercomp.wisereport.co.kr/v2/company/cF4002.aspx?rpt=1&finGubun=MAIN&cn=',
                         encparam, code, name, self.options,
@@ -103,7 +103,7 @@ class Worker(threading.Thread):
                     )
                     profitability_df = result['resultData']
 
-                    result = my.static.make_dataframe(
+                    result = my.naver.make_dataframe(
                         '성장성',
                         'https://navercomp.wisereport.co.kr/v2/company/cF4002.aspx?rpt=2&finGubun=MAIN&cn=',
                         encparam, code, name, self.options,
@@ -111,7 +111,7 @@ class Worker(threading.Thread):
                     )
                     growth_df = result['resultData']
 
-                    result = my.static.make_dataframe(
+                    result = my.naver.make_dataframe(
                         '안정성',
                         'https://navercomp.wisereport.co.kr/v2/company/cF4002.aspx?rpt=3&finGubun=MAIN&cn=',
                         encparam, code, name, self.options,
@@ -119,7 +119,7 @@ class Worker(threading.Thread):
                     )
                     stability_df = result['resultData']
 
-                    result = my.static.make_dataframe(
+                    result = my.naver.make_dataframe(
                         '활동성',
                         'https://navercomp.wisereport.co.kr/v2/company/cF4002.aspx?rpt=5&finGubun=MAIN&cn=',
                         encparam, code, name, self.options,
