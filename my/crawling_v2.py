@@ -127,19 +127,19 @@ if __name__ == '__main__':
     parser.add_option('--frq',
                       dest='frq',
                       default='1',
-                      help='0:연간,1(default):분기')
+                      help='주기: 0:연간,1(default):분기')
     parser.add_option('--quarter',
                       dest='quarter',
                       default='',
-                      help='조회분기(YYYY/MM): (default:최근분기)')
+                      help='조회분기: YYYY/MM 형식 (default:빈값,최근분기)')
     parser.add_option('--base',
                       dest='base',
                       default='',
-                      help='기준일: (default:오늘),target:조회분기')
+                      help='기준일: target:조회분기 (default:빈값,오늘)')
     parser.add_option('--workers',
                       dest='workers',
                       default='8',
-                      help='워커갯수: (default:8)')
+                      help='워커갯수: (default:빈값,8)')
     (options, args) = parser.parse_args()
 
     if options.quarter is None or options.quarter == '':
