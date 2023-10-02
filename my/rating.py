@@ -53,7 +53,7 @@ def rating(args=None):
 
     '''
     저PER, 저PBR 전략을 사용할 때는 PER 이 1 이하, PBR 이 0.3 이하와 같이 과도하게 PER 과 PBR 이 낮은 종목들은 필터링을 하는 경우가 많습니다.
-    출처: https://pinotlab.tistory.com/20
+    출처: https://pinotlab.tistory.com/20 
     '''
     merged = merged.loc[merged['PER'] > 1]
     merged = merged.loc[merged['PBR'] > 0.3]
