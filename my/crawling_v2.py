@@ -12,6 +12,7 @@ import my.static
 import my.worker
 import my.utils
 
+
 class Crawling:
 
     """
@@ -126,24 +127,24 @@ if __name__ == '__main__':
     parser.add_option('--frq',
                       dest='frq',
                       default='1',
-                      help='0:연간,1(default):분기')
+                      help='주기: 0:연간,1(default):분기')
     parser.add_option('--quarter',
                       dest='quarter',
                       default='',
-                      help='조회분기(YYYY/MM): 빈값(default:최근분기)')
+                      help='조회분기: YYYY/MM 형식 (default:빈값,최근분기)')
     parser.add_option('--base',
                       dest='base',
                       default='',
-                      help='기준일: 빈값(default:오늘),target:조회분기')
+                      help='기준일: target:조회분기 (default:빈값,오늘)')
     parser.add_option('--workers',
                       dest='workers',
                       default='8',
-                      help='워커갯수-(default:8)')
+                      help='워커갯수: (default:빈값,8)')
     (options, args) = parser.parse_args()
 
     if options.quarter is None or options.quarter == '':
         a_month_ago = datetime.now().replace(day=1) - timedelta(days=1)
-        div = (int)(a_month_ago.month / 3)
+        div = int(a_month_ago.month / 3)
         year = a_month_ago.year
         if div == 0:
             year = a_month_ago.year - 1
@@ -151,5 +152,17 @@ if __name__ == '__main__':
         else:
             nq = div*3
         options.quarter = str(year) + '/' + my.utils.two_digits(nq)
+
+    options.curr_quarter = options.quarter
+
+    year = int(options.quarter.split('/')[0])
+    month = int(options.quarter.split('/')[1])
+    if month == 3:
+        month = 12
+        year -= 1
+    else:
+        month -= 3
+    last_quarter = str(year) + '/' + my.utils.two_digits(month)
+    options.last_quarter = last_quarter
 
     Crawling(options)

@@ -1,51 +1,5 @@
 # -*- coding: utf-8 -*-
-import my.utils
-
-
-def get_firm_data_v4(options):
-    from pykrx import stock
-    return stock.get_market_cap()
-
-
-def get_firm_data_v3(options):
-    """ 회사정보 가져오기:
-    (기본): 오늘포함 최근 영업일
-    base=target일 경우: 익월 첫날부터 역으로
-    """
-
-    import pandas as pd
-    from marcap import marcap_data
-    import datetime
-
-    if options.base == 'target':
-        split = options.quarter.split('/')
-        y = int(split[0])
-        m = int(split[1])
-        if m == 12:
-            y += 1
-            m = 1
-        else:
-            m += 1
-
-        next = datetime.datetime(y, m, 1)
-    else:
-        next = datetime.datetime.now()
-
-    yyyymmdd = next.strftime('%Y-%m-%d')
-    resultList = marcap_data(yyyymmdd)
-    while len(resultList) <= 0:
-        next = next + datetime.timedelta(days=-1)
-        yyyymmdd = next.strftime('%Y-%m-%d')
-        resultList = marcap_data(yyyymmdd)
-
-    resultList = resultList.sort_values(by='Name', ascending=True)
-    resultList = resultList.reset_index(drop=False)
-
-    result = {'resultCode': 0, 'resultMsg': '', 'resultData': None}
-    result['resultCode'] = 0
-    result['resultMsg'] = ''
-    result['resultData'] = {'resultList': resultList, 'yyyymmdd': yyyymmdd}
-    return result
+# import my.utils
 
 
 def get_encparam(code):
@@ -129,3 +83,12 @@ def make_dataframe(title, url, encparam, code, name, options, ACC_NMs):
     result['resultData'] = pd.DataFrame(dict, [code])
     # result.index.name = options.quarter
     return result
+
+
+class Naver:
+
+    def __init__(self):
+        pass
+
+    def make_dataframe(self):
+        pass
