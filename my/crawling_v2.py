@@ -30,8 +30,30 @@ class Crawling:
 
         # self._merged = None
         self._total = None
-        self._firm_data = my.static.get_firm_data_v3(options)['resultData']['resultList']
+
+        from pykrx.website import krx
+        from pykrx import stock
+
+        nearest_business_day = stock.get_nearest_business_day_in_a_week()
+        if isinstance(nearest_business_day, datetime):
+            nearest_business_day = krx.datetime2string(nearest_business_day)
+        # print('nearest_business_day =', nearest_business_day)
+        self._firm_data = stock.get_market_cap(nearest_business_day)
+        df = self._firm_data
+        df.reset_index(inplace=True)
+        df.rename(columns={
+            '티커': 'Code',
+            '종목명': 'Name',
+            '소속부': 'Dept',
+            '종가': 'Close',
+            '시가총액': 'Marcap',
+            '상장주식수': 'Stocks',
+        }, inplace=True)
+        df.insert(0, 'Date', [datetime.strptime(nearest_business_day, '%Y%m%d') for i in range(len(df))])
         # self._firm_data = self._firm_data.iloc[0:30]
+
+        # self._firm_data = my.static.get_firm_data_v3(options)['resultData']['resultList']
+        # self._firm_data = self._firm_data.iloc[0:20]
 
         lock = threading.Lock()
         params = (lock, options, self.callback)
