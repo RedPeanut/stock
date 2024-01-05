@@ -1,7 +1,9 @@
 beautifulsoup4==4.11.1
+deprecated==1.2.14
 lxml==4.8.0
+matplotlib==3.8.2
+multipledispatch==1.0.0
 numpy==1.26.2
 openpyxl==3.0.10
 pandas==1.2.0
-requests==2.25.1matplotlib==3.8.2
-deprecated==1.2.14
+requests==2.25.1
