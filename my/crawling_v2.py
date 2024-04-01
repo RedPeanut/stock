@@ -31,6 +31,7 @@ class Crawling:
         # self._merged = None
         self._total = None
 
+        ''' pykrx 코드 백업 - 240401, 김진규
         from pykrx.website import krx
         from pykrx import stock
 
@@ -51,9 +52,11 @@ class Crawling:
         }, inplace=True)
         df.insert(0, 'Date', [datetime.strptime(nearest_business_day, '%Y%m%d') for i in range(len(df))])
         # self._firm_data = self._firm_data.iloc[0:30]
+        # print('')
+        '''
 
-        # self._firm_data = my.static.get_firm_data_v3(options)['resultData']['resultList']
-        # self._firm_data = self._firm_data.iloc[0:20]
+        self._firm_data = my.static.get_firm_data_v3(options)['resultData']['resultList']
+        # # self._firm_data = self._firm_data.iloc[0:20]
 
         lock = threading.Lock()
         params = (lock, options, self.callback)
