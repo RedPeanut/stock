@@ -32,15 +32,16 @@ def rating(args=None):
     import FinanceDataReader as fdr
     krx = fdr.StockListing('KRX')
     # krx = krx[['Symbol','Sector','Industry' ''', 'Representative','HomePage' ''']]
-    krx = krx[['Symbol', 'Sector', 'Industry']]
-    merged = pd.merge(data, krx, how='left', left_on='종목코드', right_on='Symbol')
-    merged.insert(merged.columns.get_loc('종목명')+1, '섹터', merged['Sector'], allow_duplicates=False)
-    merged.insert(merged.columns.get_loc('섹터')+1, '산업', merged['Industry'], allow_duplicates=False)
+    # krx = krx[['Symbol', 'Sector', 'Industry']]
+    krx = krx[['Code']]
+    merged = pd.merge(data, krx, how='left', left_on='종목코드', right_on='Code')
+    # merged.insert(merged.columns.get_loc('종목명')+1, '섹터', merged['Sector'], allow_duplicates=False)
+    # merged.insert(merged.columns.get_loc('섹터')+1, '산업', merged['Industry'], allow_duplicates=False)
     # merged.insert(merged.columns.get_loc('산업')+1, '대표', merged['Representative'], allow_duplicates=False)
     # merged.insert(merged.columns.get_loc('대표')+1, '홈페이지', merged['HomePage'], allow_duplicates=False)
-    merged = merged.drop(['Symbol'], axis=1)
-    merged = merged.drop(['Sector'], axis=1)
-    merged = merged.drop(['Industry'], axis=1)
+    merged = merged.drop(['Code'], axis=1)
+    # merged = merged.drop(['Sector'], axis=1)
+    # merged = merged.drop(['Industry'], axis=1)
     # merged = merged.drop(['Representative'], axis=1)
     # merged = merged.drop(['HomePage'], axis=1)
 
