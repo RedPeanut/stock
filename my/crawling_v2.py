@@ -57,6 +57,12 @@ class Crawling:
         # self._firm_data = my.static.get_firm_data_v3(options)['resultData']['resultList']
         # # self._firm_data = self._firm_data.iloc[0:20]
 
+        #self._firm_data = self._firm_data[
+        #    (self._firm_data['Code'] == '001810')
+        #    | (self._firm_data['Code'] == '009580')
+        #    | (self._firm_data['Code'] == '322970')
+        #]
+
         lock = threading.Lock()
         params = (lock, options, self.callback)
         self._workers = [my.worker.Worker(*params) for _ in range(int(options.workers))]
