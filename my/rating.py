@@ -12,6 +12,10 @@ def rating(args=None):
                       dest='name',
                       default='',
                       help='파일명: YY_NQ_년월일_시분초.xlsx')
+    parser.add_option('--overfit',
+                      dest='overfit',
+                      default=False,
+                      help='')
     (options, args) = parser.parse_args(args)
 
     import os
@@ -54,9 +58,14 @@ def rating(args=None):
 
     ''' 과최적?
     저PER, 저PBR 전략을 사용할 때는 PER 이 1 이하, PBR 이 0.3 이하와 같이 과도하게 PER 과 PBR 이 낮은 종목들은 필터링을 하는 경우가 많습니다.
-    출처: https://pinotlab.tistory.com/20 
-    merged = merged.loc[merged['PER'] > 1]
-    merged = merged.loc[merged['PBR'] > 0.3] '''
+    출처: https://pinotlab.tistory.com/20 '''
+    overfit = options.overfit
+
+    if overfit:
+        merged = merged.loc[merged['PER'] > 1]
+        merged = merged.loc[merged['PBR'] > 0.3]
+
+    overfit_tag = '_과최적' if overfit else ''
 
     # 종합순위(1/PER+1/PBR+1/PCR+1/PSR)
     merged['GP/A'] = merged['매출총이익']/merged['자산총계']
@@ -81,13 +90,13 @@ def rating(args=None):
 
     # 종합순위
     sorted = merged.sort_values(by='종합 순위', ascending=True)
-    sorted.to_excel(curr_dir + '/download/' + name[:5] + '_종합순위_' + now.strftime('%y%m%d_%H%M%S') + '.xlsx')
+    sorted.to_excel(curr_dir + '/download/' + name[:5] + '_종합순위_' + now.strftime('%y%m%d_%H%M%S') + overfit_tag + '.xlsx')
 
     # 종합순위+소형주
     tailed = merged.sort_values(by='시가총액', ascending=False).tail(int(len(merged)*0.2))
     #tailed['종합 순위'] = tailed['종합 순위'].rank().sort_values(ascending=True)
     tailed = tailed.sort_values(by='종합 순위', ascending=True)
-    tailed.to_excel(curr_dir + '/download/' + name[:5] + '_종합순위(소형주)_' + now.strftime('%y%m%d_%H%M%S') + '.xlsx')
+    tailed.to_excel(curr_dir + '/download/' + name[:5] + '_종합순위(소형주)_' + now.strftime('%y%m%d_%H%M%S') + overfit_tag + '.xlsx')
 
     # # NCAV
     # filter = (merged['유동자산'] - merged['부채총계']) * 100000000 > merged['시가총액'] * 1.0
