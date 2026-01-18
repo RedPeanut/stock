@@ -50,7 +50,7 @@ class Worker(threading.Thread):
 
                     init_df = pd.DataFrame({
                         '종목명': row['Name'],
-                        '전분기': '', # insert whether using previous data in here
+                        '전분기': '', # insert in here whether use previous data
                         '기준일': row['Date'].strftime('%Y-%m-%d'),
                         '소속부': row['Dept'],
                         '시가총액': row['Marcap'],
