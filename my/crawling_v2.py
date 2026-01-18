@@ -2,10 +2,11 @@
 """
 """
 
-from datetime import datetime, timedelta
+# from datetime import datetime, timedelta
 import os
 import platform
 import time
+import datetime
 import threading
 import pandas as pd
 import my.static
@@ -31,7 +32,25 @@ class Crawling:
         # self._merged = None
         self._total = None
 
-        ''' pykrx 코드 백업 - 240401, 김진규 '''
+        import FinanceDataReader as fdr
+
+        # impl get_nearest_business_day_in_a_week
+        now = datetime.datetime.now()
+        oneWeekAgo = now + datetime.timedelta(days=-7)
+        start = oneWeekAgo.strftime('%Y-%m-%d')
+        end = now.strftime('%Y-%m-%d')
+
+        # 삼성전자로 판단
+        df = fdr.DataReader('005930', start, end)
+        nearest_business_day = df.index[-1]
+
+        krx = fdr.StockListing('KRX')
+        krx.insert(0, 'Date', [nearest_business_day for i in range(len(krx))])
+        krx = krx.iloc[0:20]
+        # print(krx.head())
+        self._firm_data = krx
+
+        ''' pykrx 코드 백업 - 240401, 김진규 
         from pykrx.website import krx
         from pykrx import stock
 
@@ -53,9 +72,12 @@ class Crawling:
         df.insert(0, 'Date', [datetime.strptime(nearest_business_day, '%Y%m%d') for i in range(len(df))])
         # self._firm_data = self._firm_data.iloc[0:30]
         # print('')
+        '''
 
-        # self._firm_data = my.static.get_firm_data_v3(options)['resultData']['resultList']
-        # # self._firm_data = self._firm_data.iloc[0:20]
+        '''
+        self._firm_data = my.static.get_firm_data_v3(options)['resultData']['resultList']
+        self._firm_data = self._firm_data.iloc[0:20]
+        '''
 
         #self._firm_data = self._firm_data[
         #    (self._firm_data['Code'] == '001810')
@@ -110,7 +132,7 @@ class Crawling:
 
         curr_dir = os.path.dirname(os.path.abspath(__file__))
         os.makedirs(curr_dir + '/download/', exist_ok=True)
-        now = datetime.now()
+        now = datetime.datetime.now()
 
         split = self._options.quarter.split('/')
         yy = split[0][2:4]
@@ -141,10 +163,10 @@ class Crawling:
 
 if __name__ == '__main__':
 
-    # if platform.system() == 'Windows':
-    #     os.system('marcap.bat')
-    # else:  # Linux, Mac
-    #     os.system('sh marcap.sh')
+    if platform.system() == 'Windows':
+        os.system('marcap.bat')
+    else:  # Linux, Mac
+        os.system('sh marcap.sh')
 
     from optparse import OptionParser
 
@@ -173,7 +195,7 @@ if __name__ == '__main__':
     (options, args) = parser.parse_args()
 
     if options.quarter is None or options.quarter == '':
-        a_month_ago = datetime.now().replace(day=1) - timedelta(days=1)
+        a_month_ago = datetime.datetime.now().replace(day=1) - datetime.timedelta(days=1)
         div = int(a_month_ago.month / 3)
         year = a_month_ago.year
         if div == 0:
