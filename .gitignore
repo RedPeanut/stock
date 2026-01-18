@@ -20,13 +20,9 @@ venv/
 # IDE
 .idea
 
-# My
+# dir
 old/
 marcap/
-FinanceDataReader/
-dart_fss/
-dart_fss_classifier/
-pykrx/
 fsdata*/
 .cache/
 OpenDartReader/
@@ -34,3 +30,9 @@ docs_cache/
 download/
 v2/
 logs/
+
+# link
+dart_fss
+FinanceDataReader
+pykrx
+pykrx_openapi
