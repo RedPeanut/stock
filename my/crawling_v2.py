@@ -46,7 +46,7 @@ class Crawling:
 
         krx = fdr.StockListing('KRX')
         krx.insert(0, 'Date', [nearest_business_day for i in range(len(krx))])
-        krx = krx.iloc[0:20]
+        # krx = krx.iloc[0:20]
         # print(krx.head())
         self._firm_data = krx
 
