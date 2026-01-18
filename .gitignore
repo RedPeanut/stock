@@ -33,6 +33,7 @@ logs/
 
 # link
 dart_fss
+dart_fss_classifier
 FinanceDataReader
 pykrx
 pykrx_openapi
