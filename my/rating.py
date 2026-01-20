@@ -29,7 +29,7 @@ def rating(args=None):
     #filename = os.path.basename(filepath)
 
     # 전처리
-    data['종목코드'] = data['종목코드'].apply(lambda x: '{:06d}'.format(x))
+    # data['종목코드'] = data['종목코드'].apply(lambda x: '{:06d}'.format(x))
     # data['소속부'] = data['소속부'].apply(lambda x: x if x not in (None, '', np.NaN) else ' ')
     data['소속부'] = data['소속부'].replace([None, np.nan], '')
 
