@@ -29,6 +29,12 @@
       "module": "my.test_finance_data_reader"
     },
     {
+      "name": "Python Debugger: Module: my.test_kis_code",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "my.test_kis_code"
+    },
+    {
       "name": "Python Debugger: Module: my.rating",
       "type": "debugpy",
       "request": "launch",

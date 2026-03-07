@@ -13,13 +13,11 @@ def main(args=None):
     start = oneWeekAgo.strftime('%Y-%m-%d')
     end = now.strftime('%Y-%m-%d')
 
-    # 삼성전자로 판단
+    # 가장최근영업일 가져오기 (삼성전자로)
     df = fdr.DataReader('005930', start, end)
+    # print(df)
     nearest_business_day = df.index[-1]
-    # print(nearest_business_day.strftime('%Y%m%d'))
-
-    # 가장 마지막 값의 날짜(Date) 가 최근 영업일
-    # print(df['Date'].iloc[-1])
+    print(nearest_business_day.strftime('%Y%m%d'))
 
     krx = fdr.StockListing('KRX')
     krx.insert(0, 'Date', [nearest_business_day for i in range(len(krx))])

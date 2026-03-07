@@ -31,9 +31,14 @@ download/
 v2/
 logs/
 
+# file
+*.xlsx
+*.mst
+
 # link
 dart_fss
 dart_fss_classifier
 FinanceDataReader
 pykrx
 pykrx_openapi
+open-trading-api
