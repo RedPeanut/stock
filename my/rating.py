@@ -56,6 +56,7 @@ def rating(args=None):
     merged = merged.drop(['기준일'], axis=1)
 
     # 중국,스펙기업 필터링
+    merged['종목코드'] = merged['종목코드'].astype(str)
     merged = merged.loc[~merged['종목코드'].str.startswith('9')]
     merged = merged.loc[~merged['소속부'].str.contains('SPAC')]
 

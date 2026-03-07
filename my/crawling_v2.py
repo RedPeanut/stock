@@ -32,23 +32,32 @@ class Crawling:
         # self._merged = None
         self._total = None
 
-        import FinanceDataReader as fdr
-
         # impl get_nearest_business_day_in_a_week
         now = datetime.datetime.now()
         oneWeekAgo = now + datetime.timedelta(days=-7)
         start = oneWeekAgo.strftime('%Y-%m-%d')
         end = now.strftime('%Y-%m-%d')
 
+        import FinanceDataReader as fdr
+
         # 삼성전자로 판단
         df = fdr.DataReader('005930', start, end)
         nearest_business_day = df.index[-1]
 
+        import my.kis_code
+        stockList = my.kis_code.main()
+        stockList.insert(0, 'Date', [nearest_business_day for i in range(len(stockList))])
+        stockList = stockList.iloc[0:40]
+        # print(stockList)
+        # return
+        self._firm_data = stockList
+
+        ''' fdr 코드 백업 - 260307, 김진규
         krx = fdr.StockListing('KRX')
         krx.insert(0, 'Date', [nearest_business_day for i in range(len(krx))])
         # krx = krx.iloc[0:20]
         # print(krx.head())
-        self._firm_data = krx
+        self._firm_data = krx '''
 
         ''' pykrx 코드 백업 - 240401, 김진규 
         from pykrx.website import krx
