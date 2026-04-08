@@ -35,10 +35,10 @@
       "module": "my.test_pykrx_openapi"
     },
     {
-      "name": "Python Debugger: Module: my.test_kis_code",
+      "name": "Python Debugger: Module: my.kis_code",
       "type": "debugpy",
       "request": "launch",
-      "module": "my.test_kis_code"
+      "module": "my.kis_code"
     },
     {
       "name": "Python Debugger: Module: open-trading-api.stocks_info.kis_kospi_code_mst",
