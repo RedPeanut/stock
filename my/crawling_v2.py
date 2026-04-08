@@ -47,7 +47,7 @@ class Crawling:
         import my.kis_code
         stockList = my.kis_code.main()
         stockList.insert(0, 'Date', [nearest_business_day for i in range(len(stockList))])
-        stockList = stockList.iloc[0:40]
+        # stockList = stockList.iloc[0:40]
         # print(stockList)
         # return
         self._firm_data = stockList
